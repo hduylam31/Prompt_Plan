@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CYO · Response Standard · 6-Layer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --yody:       #FCAF17;
+  --yody-glow:  rgba(252,175,23,.12);
+  --yody-border:rgba(252,175,23,.28);
+  --bg:         #0B0D12;
+  --bg-card:    #111318;
+  --bg-row:     #0F1117;
+  --border:     rgba(255,255,255,.065);
+  --border-hi:  rgba(252,175,23,.3);
+  --text:       #E6EAF4;
+  --dim:        #9CA3AF;
+  --muted:      #4B5563;
+
+  /* Layer colors */
+  --ctx:  #3B82F6;
+  --obs:  #10B981;
+  --obj:  #FCAF17;
+  --ana:  #8B5CF6;
+  --rec:  #F97316;
+  --imp:  #EC4899;
+
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'Plus Jakarta Sans', sans-serif;
+  --r:    10px;
+  --r-sm: 6px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Grid background */
+body::before {
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(252,175,23,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(252,175,23,.025) 1px,transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;z-index:0;
+}
+
+/* Glow blob */
+body::after {
+  content:'';
+  position:fixed;top:-200px;right:-200px;
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(252,175,23,.06) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+}
+
+.wrap {
+  max-width:980px;
+  margin:0 auto;
+  padding:52px 24px 96px;
+  position:relative;z-index:1;
+}
+
+/* ═══ TOPBAR ═══════════════════════════════════ */
+.topbar {
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:52px;
+  animation:fadeD .5s ease both;
+}
+.logo {
+  width:44px;height:44px;border-radius:9px;
+  background:var(--yody);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-weight:600;font-size:14px;color:#000;
+  box-shadow:0 0 28px rgba(252,175,23,.35);flex-shrink:0;
+}
+.topbar-text h1{font-size:22px;font-weight:700;letter-spacing:-.4px}
+.topbar-text h1 em{font-style:normal;color:var(--yody)}
+.topbar-text p{font-size:12px;color:var(--muted);font-family:var(--mono);margin-top:3px}
+
+/* ═══ LAYER LEGEND ═══════════════════════════════ */
+.legend-card {
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:28px;
+  margin-bottom:36px;
+  animation:fadeU .5s ease .08s both;
+}
+.legend-card h2{
+  font-size:13px;font-weight:600;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--dim);margin-bottom:20px;font-family:var(--mono);
+}
+.layer-grid {
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:10px;
+}
+@media(max-width:700px){.layer-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:420px){.layer-grid{grid-template-columns:repeat(2,1fr)}}
+
+.layer-pill {
+  border-radius:var(--r-sm);
+  padding:14px 12px;
+  border:1px solid transparent;
+  transition:transform .2s,box-shadow .2s;
+  cursor:default;
+}
+.layer-pill:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.layer-pill[data-l="ctx"]{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.22)}
+.layer-pill[data-l="obs"]{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.22)}
+.layer-pill[data-l="obj"]{background:rgba(252,175,23,.08);border-color:rgba(252,175,23,.22)}
+.layer-pill[data-l="ana"]{background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.22)}
+.layer-pill[data-l="rec"]{background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.22)}
+.layer-pill[data-l="imp"]{background:rgba(236,72,153,.08);border-color:rgba(236,72,153,.22)}
+
+.lp-num {
+  font-family:var(--mono);font-size:22px;font-weight:600;line-height:1;margin-bottom:6px;
+}
+.layer-pill[data-l="ctx"] .lp-num{color:var(--ctx)}
+.layer-pill[data-l="obs"] .lp-num{color:var(--obs)}
+.layer-pill[data-l="obj"] .lp-num{color:var(--obj)}
+.layer-pill[data-l="ana"] .lp-num{color:var(--ana)}
+.layer-pill[data-l="rec"] .lp-num{color:var(--rec)}
+.layer-pill[data-l="imp"] .lp-num{color:var(--imp)}
+
+.lp-name{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:5px}
+.layer-pill[data-l="ctx"] .lp-name{color:var(--ctx)}
+.layer-pill[data-l="obs"] .lp-name{color:var(--obs)}
+.layer-pill[data-l="obj"] .lp-name{color:var(--obj)}
+.layer-pill[data-l="ana"] .lp-name{color:var(--ana)}
+.layer-pill[data-l="rec"] .lp-name{color:var(--rec)}
+.layer-pill[data-l="imp"] .lp-name{color:var(--imp)}
+
+.lp-vi{font-size:11px;color:var(--dim);line-height:1.5}
+
+/* ═══ DISCLAIMER ═══════════════════════════════ */
+.note {
+  background:rgba(252,175,23,.06);
+  border:1px solid rgba(252,175,23,.18);
+  border-radius:var(--r-sm);
+  padding:11px 16px;
+  font-size:12px;color:#FCD34D;
+  font-family:var(--mono);
+  display:flex;gap:8px;align-items:flex-start;
+  margin-bottom:32px;
+  animation:fadeU .5s ease .14s both;
+}
+.note::before{content:'⚠';flex-shrink:0;margin-top:1px}
+
+/* ═══ SECTION LABEL ═══════════════════════════ */
+.sec-label {
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.sec-label::before{
+  content:'';display:inline-block;
+  width:18px;height:1px;background:var(--yody);
+}
+
+/* ═══ QUESTION CARD ═══════════════════════════ */
+.q-card {
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+  margin-bottom:20px;
+  transition:border-color .25s;
+  animation:fadeU .5s ease both;
+}
+.q-card:hover{border-color:rgba(252,175,23,.2)}
+.q-card.open{border-color:var(--border-hi)}
+.q-card:nth-child(1){animation-delay:.15s}
+.q-card:nth-child(2){animation-delay:.22s}
+.q-card:nth-child(3){animation-delay:.29s}
+
+.q-head {
+  background:var(--bg-card);
+  padding:18px 22px;
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;user-select:none;
+  transition:background .2s;
+}
+.q-head:hover{background:rgba(255,255,255,.025)}
+.q-badge {
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  color:var(--yody);background:var(--yody-glow);
+  border:1px solid var(--yody-border);
+  border-radius:4px;padding:3px 8px;flex-shrink:0;
+}
+.q-title{flex:1;font-size:14px;font-weight:600;line-height:1.5;color:var(--text)}
+.q-icon{
+  font-size:20px;color:var(--muted);
+  transition:transform .3s,color .2s;flex-shrink:0;
+  font-family:var(--mono);font-weight:300;
+}
+.q-card.open .q-icon{transform:rotate(45deg);color:var(--yody)}
+
+/* ═══ RESPONSE BODY ══════════════════════════ */
+.q-body{display:none;background:var(--bg-row)}
+.q-card.open .q-body{display:block}
+
+/* Each layer row */
+.layer-row {
+  display:grid;
+  grid-template-columns:148px 1fr;
+  border-bottom:1px solid var(--border);
+}
+.layer-row:last-child{border-bottom:none}
+@media(max-width:600px){.layer-row{grid-template-columns:1fr}}
+
+.lr-label {
+  padding:20px 18px;
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:6px;
+  background:rgba(0,0,0,.15);
+}
+@media(max-width:600px){
+  .lr-label{border-right:none;border-bottom:1px solid var(--border);
+  flex-direction:row;align-items:center;padding:12px 18px;gap:10px}
+}
+
+.lr-badge {
+  font-family:var(--mono);font-size:12px;font-weight:600;
+  width:30px;height:30px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.lr-badge[data-l="ctx"]{background:rgba(59,130,246,.15);color:#60A5FA}
+.lr-badge[data-l="obs"]{background:rgba(16,185,129,.15);color:#34D399}
+.lr-badge[data-l="obj"]{background:rgba(252,175,23,.15);color:#FCAF17}
+.lr-badge[data-l="ana"]{background:rgba(139,92,246,.15);color:#A78BFA}
+.lr-badge[data-l="rec"]{background:rgba(249,115,22,.15);color:#FB923C}
+.lr-badge[data-l="imp"]{background:rgba(236,72,153,.15);color:#F472B6}
+
+.lr-name{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase}
+.lr-badge[data-l="ctx"]+.lr-name{color:#60A5FA}
+.lr-badge[data-l="obs"]+.lr-name{color:#34D399}
+.lr-badge[data-l="obj"]+.lr-name{color:#FCAF17}
+.lr-badge[data-l="ana"]+.lr-name{color:#A78BFA}
+.lr-badge[data-l="rec"]+.lr-name{color:#FB923C}
+.lr-badge[data-l="imp"]+.lr-name{color:#F472B6}
+
+.lr-content {
+  padding:20px 24px;
+  font-size:13.5px;line-height:1.8;color:var(--dim);
+}
+
+/* ── Inline helpers ── */
+.kv {display:inline-flex;align-items:baseline;gap:4px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);
+  border-radius:6px;padding:1px 10px;margin:0 2px;font-family:var(--mono);}
+.kv-val{font-size:17px;font-weight:600;color:var(--text)}
+.kv-val.up{color:#34D399} .kv-val.dn{color:#F87171} .kv-val.yd{color:var(--yody)}
+.kv-u{font-size:11px;color:var(--muted)}
+
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:500;
+  border-radius:4px;padding:1px 7px;margin:0 2px}
+.tag.blue  {background:rgba(59,130,246,.14);color:#93C5FD}
+.tag.green {background:rgba(16,185,129,.14);color:#6EE7B7}
+.tag.amber {background:rgba(252,175,23,.14);color:#FDE68A}
+.tag.violet{background:rgba(139,92,246,.14);color:#C4B5FD}
+.tag.orange{background:rgba(249,115,22,.14);color:#FDBA74}
+.tag.pink  {background:rgba(236,72,153,.14);color:#F9A8D4}
+.tag.red   {background:rgba(239,68,68,.12);color:#FCA5A5}
+
+.code-box {
+  background:var(--bg-card);border:1px solid var(--border);
+  border-left:3px solid var(--ctx);
+  border-radius:0 var(--r-sm) var(--r-sm) 0;
+  padding:10px 14px;font-size:12px;
+  margin:8px 0;color:var(--dim);font-family:var(--mono);line-height:1.6;
+}
+.code-box.obs{border-left-color:var(--obs)}
+.code-box.obj{border-left-color:var(--obj)}
+.code-box.ana{border-left-color:var(--ana)}
+.code-box.rec{border-left-color:var(--rec)}
+.code-box.imp{border-left-color:var(--imp)}
+
+/* Table */
+.dt {width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px;font-family:var(--mono);table-layout:fixed}
+.dt thead tr{border-bottom:1px solid var(--border)}
+.dt th{text-align:left;padding:6px 10px;color:var(--muted);font-weight:500;font-size:11px;letter-spacing:.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dt th:not(:first-child){text-align:right}
+.dt td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.03);word-break:break-word}
+.dt td:not(:first-child){text-align:right}
+.dt tr:last-child td{border-bottom:none}
+
+/* Prevent content overflow */
+.lr-content{min-width:0;overflow-x:hidden}
+.code-box{word-break:break-word;overflow-wrap:anywhere}
+
+/* Action list */
+.al{list-style:none;margin:6px 0}
+.al li{
+  display:flex;align-items:flex-start;gap:8px;
+  padding:7px 0;border-bottom:1px solid var(--border);
+  font-size:13px;
+}
+.al li:last-child{border-bottom:none}
+.al li::before{content:'→';color:var(--yody);font-family:var(--mono);
+  font-weight:600;flex-shrink:0;margin-top:1px}
+
+/* Risk/impact stacked layout */
+.ri-grid{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.ri-box{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:14px 16px;
+  display:flex;align-items:flex-start;gap:12px;
+}
+.ri-box.benefit{border-left:3px solid #34D399}
+.ri-box.risk   {border-left:3px solid #F87171}
+.ri-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.ri-body h4{
+  font-size:11px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:6px;font-family:var(--mono);
+}
+.ri-box.benefit .ri-body h4{color:#34D399}
+.ri-box.risk    .ri-body h4{color:#F87171}
+.ri-body p{font-size:13px;color:var(--dim);line-height:1.75}
+.ri-body strong{color:var(--text)}
+
+/* SMART goal */
+.smart-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0}
+@media(max-width:600px){.smart-grid{grid-template-columns:repeat(2,1fr)}}
+.smart-cell{background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:12px 10px;text-align:center}
+.smart-cell .sl{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--yody);line-height:1}
+.smart-cell .sn{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin:4px 0 6px}
+.smart-cell .sv{font-size:12px;color:var(--dim);line-height:1.5}
+
+/* ═══ CONTEXT 2-PART ════════════════════════ */
+.ctx-block{display:flex;flex-direction:column;gap:0}
+.ctx-part{
+  padding:12px 14px;
+  border:1px solid var(--border);
+  border-radius:0;
+  border-bottom:none;
+  font-size:13px;line-height:1.75;color:var(--dim);
+  position:relative;
+}
+.ctx-part:first-child{border-radius:var(--r-sm) var(--r-sm) 0 0}
+.ctx-last{border-bottom:1px solid var(--border)!important;border-radius:0 0 var(--r-sm) var(--r-sm)}
+.ctx-tag{
+  display:block;
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:1.2px;text-transform:uppercase;
+  margin-bottom:5px;
+}
+.ctx-part:nth-child(1){background:rgba(59,130,246,.04);border-color:rgba(59,130,246,.15)}
+.ctx-part:nth-child(1) .ctx-tag{color:var(--ctx)}
+.ctx-last{background:rgba(107,114,128,.04)!important;border-color:rgba(107,114,128,.12)!important}
+.ctx-last .ctx-tag{color:var(--dim)}
+
+/* ═══ CHART WRAPPER ══════════════════════════ */
+.chart-block{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:16px;margin:12px 0;
+}
+.chart-title{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--muted);margin-bottom:12px;letter-spacing:.5px;
+}
+.chart-2col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+@media(max-width:580px){.chart-2col{grid-template-columns:1fr}}
+canvas{max-width:100%}
+
+/* ═══ FOOTER ═══════════════════════════════ */
+.footer{
+  border-top:1px solid var(--border);margin-top:52px;padding-top:20px;
+  font-size:11.5px;color:var(--muted);font-family:var(--mono);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;
+}
+
+/* ═══ ANIMATIONS ═══════════════════════════ */
+@keyframes fadeD{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeU{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+/* ═══ INSTRUCTION SECTION ═══════════════════ */
+.instr-wrap{margin-top:56px}
+.instr-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--r);overflow:hidden;
+  animation:fadeU .5s ease .3s both;
+}
+.instr-header{
+  background:linear-gradient(135deg,rgba(252,175,23,.08),rgba(139,92,246,.06));
+  border-bottom:1px solid var(--border);
+  padding:24px 28px;
+  display:flex;align-items:flex-start;gap:16px;
+}
+.instr-icon{
+  width:40px;height:40px;border-radius:8px;
+  background:rgba(252,175,23,.12);border:1px solid rgba(252,175,23,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.instr-header-text h3{font-size:16px;font-weight:700;margin-bottom:4px}
+.instr-header-text p{font-size:12px;color:var(--dim);font-family:var(--mono)}
+
+/* Tab nav */
+.instr-tabs{
+  display:flex;border-bottom:1px solid var(--border);
+  overflow-x:auto;background:var(--bg-card);
+}
+.instr-tab{
+  padding:11px 20px;font-size:12px;font-weight:600;
+  font-family:var(--mono);color:var(--muted);cursor:pointer;
+  border-bottom:2px solid transparent;white-space:nowrap;
+  transition:color .2s,border-color .2s;
+}
+.instr-tab:hover{color:var(--dim)}
+.instr-tab.active{color:var(--yody);border-bottom-color:var(--yody)}
+
+.instr-pane{display:none;padding:24px 28px}
+.instr-pane.active{display:block}
+
+/* Prompt block */
+.prompt-block{
+  background:#080A0F;
+  border:1px solid rgba(252,175,23,.15);
+  border-radius:var(--r-sm);
+  padding:0;
+  position:relative;overflow:hidden;
+}
+.prompt-topbar{
+  background:rgba(252,175,23,.07);
+  border-bottom:1px solid rgba(252,175,23,.12);
+  padding:8px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.prompt-lang{font-family:var(--mono);font-size:10px;color:var(--yody);font-weight:600;letter-spacing:1px}
+.copy-btn{
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  color:var(--dim);background:rgba(255,255,255,.06);
+  border:1px solid var(--border);border-radius:4px;
+  padding:3px 10px;cursor:pointer;transition:all .2s;
+}
+.copy-btn:hover{color:var(--text);border-color:var(--yody-border)}
+.copy-btn.copied{color:#34D399;border-color:rgba(52,211,153,.3)}
+.prompt-code{
+  padding:16px 20px;
+  font-family:var(--mono);font-size:12px;line-height:1.8;
+  color:#C8D0E0;white-space:pre-wrap;word-break:break-word;
+  margin:0;
+}
+.ph{color:#A78BFA} /* placeholder / var */
+.pk{color:#60A5FA} /* keyword */
+.pc{color:#6B7280} /* comment */
+.ps{color:#34D399} /* string */
+.py{color:#FCAF17} /* yody accent */
+
+/* Layer breakdown table */
+.layer-breakdown{width:100%;border-collapse:collapse;font-size:12.5px}
+.layer-breakdown th{
+  text-align:left;padding:8px 12px;
+  font-family:var(--mono);font-size:10px;font-weight:600;
+  letter-spacing:1px;text-transform:uppercase;color:var(--muted);
+  border-bottom:1px solid var(--border);
+}
+.layer-breakdown td{
+  padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04);
+  vertical-align:top;line-height:1.65;color:var(--dim);font-size:12.5px;
+}
+.layer-breakdown tr:last-child td{border-bottom:none}
+.lb-num{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  width:30px;text-align:center;
+}
+.lb-do{color:#34D399;font-size:12px}
+.lb-dont{color:#F87171;font-size:12px}
+
+/* Checklist */
+.chk-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin:0}
+.chk-list li{
+  display:flex;align-items:flex-start;gap:10px;
+  font-size:13px;color:var(--dim);line-height:1.65;
+}
+.chk-list li span.ico{flex-shrink:0;font-size:14px;margin-top:1px}
+.chk-list.dont li span.ico{color:#F87171}
+.chk-list.do li span.ico{color:#34D399}
+
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(252,175,23,.28);border-radius:3px}
+
+/* ===== ENHANCED BALANCED LAYOUT ===== */
+.wrap{
+  max-width:1200px !important;
+  padding:48px 32px 96px !important;
+}
+
+.q-card{
+  box-shadow:0 8px 32px rgba(0,0,0,.18);
+  backdrop-filter: blur(8px);
+}
+
+.q-head{
+  padding:22px 26px !important;
+}
+
+.q-title{
+  font-size:15px !important;
+  letter-spacing:.1px;
+}
+
+.layer-row{
+  grid-template-columns:180px 1fr !important;
+}
+
+.lr-label{
+  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+  padding:22px 20px !important;
+}
+
+.lr-content{
+  padding:24px 28px !important;
+  font-size:14px !important;
+  line-height:1.9 !important;
+}
+
+.chart-block,
+.smart-cell,
+.ri-box,
+.code-box,
+.ctx-part{
+  box-shadow:0 4px 18px rgba(0,0,0,.14);
+}
+
+.smart-grid{
+  gap:12px !important;
+}
+
+.smart-cell{
+  padding:16px 14px !important;
+}
+
+.smart-cell .sv{
+  font-size:12.5px !important;
+}
+
+.dt{
+  margin-top:16px !important;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.dt thead{
+  background:rgba(255,255,255,.03);
+}
+
+.dt td,
+.dt th{
+  padding:12px 14px !important;
+}
+
+.layer-pill{
+  min-height:140px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+}
+
+.legend-card{
+  padding:32px !important;
+}
+
+.note{
+  padding:14px 18px !important;
+  line-height:1.7;
+}
+
+.prompt-code{
+  max-height:700px;
+  overflow:auto;
+}
+
+.instr-pane{
+  padding:28px 32px !important;
+}
+
+.footer{
+  margin-top:72px !important;
+}
+
+@media(max-width:900px){
+  .layer-row{
+    grid-template-columns:1fr !important;
+  }
+  
+  .wrap{
+    padding:28px 18px 72px !important;
+  }
+
+  .chart-2col{
+    grid-template-columns:1fr !important;
+  }
+}
+
+@media(max-width:600px){
+  .topbar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .q-head{
+    padding:18px 18px !important;
+  }
+
+  .lr-content{
+    padding:18px !important;
+  }
+
+  .smart-grid{
+    grid-template-columns:1fr !important;
+  }
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">CYO</div>
+  <div class="topbar-text">
+    <h1>AI Response Standard · <em>6-Layer Framework</em></h1>
+    <p>Chuẩn hóa cấu trúc câu trả lời của CYO Agent · Context → Observation → Objective → Analysis → Recommendation → Impact</p>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend-card">
+  <h2>Cấu trúc 6 tầng — mỗi câu trả lời phải đầy đủ tất cả</h2>
+  <div class="layer-grid">
+    <div class="layer-pill" data-l="ctx">
+      <div class="lp-num">01</div>
+      <div class="lp-name">Context</div>
+      <div class="lp-vi">Bối cảnh · định nghĩa metric · giới hạn phạm vi · nguồn dữ liệu</div>
+    </div>
+    <div class="layer-pill" data-l="obs">
+      <div class="lp-num">02</div>
+      <div class="lp-name">Observation</div>
+      <div class="lp-vi">Thống kê & dữ liệu · số liệu thực · xu hướng · biểu đồ</div>
+    </div>
+    <div class="layer-pill" data-l="obj">
+      <div class="lp-num">03</div>
+      <div class="lp-name">Objective</div>
+      <div class="lp-vi">Mục tiêu SMART · đo lường được · có deadline</div>
+    </div>
+    <div class="layer-pill" data-l="ana">
+      <div class="lp-num">04</div>
+      <div class="lp-name">Analysis</div>
+      <div class="lp-vi">Phân tích root cause · tại sao lại như vậy · insight sâu</div>
+    </div>
+    <div class="layer-pill" data-l="rec">
+      <div class="lp-num">05</div>
+      <div class="lp-name">Recommendation</div>
+      <div class="lp-vi">Khuyến nghị · giải pháp có ưu tiên · owner rõ ràng</div>
+    </div>
+    <div class="layer-pill" data-l="imp">
+      <div class="lp-num">06</div>
+      <div class="lp-name">Impact + Risk</div>
+      <div class="lp-vi">Kết quả kỳ vọng · cách đo · rủi ro & cách giảm thiểu</div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTE -->
+<div class="note">Các số liệu dưới đây là DỮ LIỆU MẪU để minh họa format — không phản ánh số thực của YODY. CYO Agent sẽ điền số thật từ BigQuery mart khi go-live.</div>
+
+<!-- QUESTIONS -->
+<div class="sec-label">Ví dụ câu trả lời mẫu · 3 câu hỏi tiêu chuẩn</div>
+<div style="height:1px;background:linear-gradient(90deg,transparent,rgba(252,175,23,.25),transparent);margin:18px 0 30px"></div>
+
+<!-- ══════════ Q1: ACTIVE ══════════ -->
+<div class="q-card open" id="q1">
+  <div class="q-head" onclick="toggle('q1')">
+    <span class="q-badge">Q-01</span>
+    <span class="q-title">SL KH Active đầu kỳ tháng 2026-04 là bao nhiêu?</span>
+    <span class="q-icon">+</span>
+  </div>
+  <div class="q-body">
+
+    <!-- 01 Context -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="ctx">01</div><div class="lr-name">Context</div></div>
+      <div class="lr-content">
+        <div class="ctx-block">
+          <div class="ctx-part">
+            <span class="ctx-tag">Tình hình hiện tại</span>
+            Marketing Team đang bước vào tháng 04/2026 — tháng đầu tiên của Q2 — với áp lực duy trì tệp khách hàng ổn định sau Q1 có mức tăng trưởng chậm. Ban lãnh đạo yêu cầu báo cáo cohort retention hàng tháng, trong đó <span class="tag blue">SL KH Active đầu kỳ</span> là con số baseline bắt buộc để tính churn rate, Net Revenue Retention, và phân bổ ngân sách win-back.
+          </div>
+          <div class="ctx-part ctx-last">
+            <span class="ctx-tag">Giới hạn phạm vi</span>
+            Tính khách đã mua thực sự (đơn giao thành công) trong vòng 12 tháng trước, tính đến ngày 31/03/2026. Không tính đơn huỷ, đơn hoàn trả, hoặc tài khoản đã bị xoá. Chuẩn 12 tháng này đang dùng riêng trong CYO — BI Team đang dùng chuẩn 6 tháng, hai bên chưa đồng thuận.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 Observation -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="obs">02</div><div class="lr-name">Observation</div></div>
+      <div class="lr-content">
+        SL KH Active đầu kỳ 04/2026:
+        <span class="kv"><span class="kv-val yd">312,840</span><span class="kv-u">KH</span></span><br><br>
+
+        <div class="chart-2col">
+          <div class="chart-block">
+            <div class="chart-title">📈 Xu hướng Active KH — 6 tháng gần nhất</div>
+            <canvas id="c1-trend" height="180"></canvas>
+          </div>
+          <div class="chart-block">
+            <div class="chart-title">🍩 Phân bổ theo nhóm RFM</div>
+            <canvas id="c1-rfm" height="180"></canvas>
+          </div>
+        </div>
+
+        <table class="dt">
+          <thead><tr>
+            <th>Nhóm RFM</th><th>SL KH</th><th>Tỷ lệ</th><th>Avg LTV (K VND)</th>
+          </tr></thead>
+          <tbody>
+            <tr><td style="color:#34D399">Champions</td><td>47,200</td><td>15.1%</td><td style="color:#34D399">4,850</td></tr>
+            <tr><td style="color:#60A5FA">Loyal Customers</td><td>68,500</td><td>21.9%</td><td>2,940</td></tr>
+            <tr><td style="color:#FCD34D">Potential Loyalists</td><td>89,140</td><td>28.5%</td><td>1,620</td></tr>
+            <tr><td style="color:#F87171">At Risk</td><td>108,000</td><td>34.5%</td><td style="color:#F87171">890</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 03 Objective -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="obj">03</div><div class="lr-name">Objective</div></div>
+      <div class="lr-content">
+        <strong style="color:var(--text)">Mục tiêu tháng 04/2026 cho chỉ số này:</strong><br><br>
+        <div class="smart-grid">
+          <div class="smart-cell"><div class="sl">S</div><div class="sn">Specific</div><div class="sv">Giữ SL Active ≥ 315,000 cuối kỳ T4</div></div>
+          <div class="smart-cell"><div class="sl">M</div><div class="sn">Measurable</div><div class="sv">Đo qua mart_customer_lifecycle, cập nhật daily</div></div>
+          <div class="smart-cell"><div class="sl">A</div><div class="sn">Achievable</div><div class="sv">+0.7% từ đầu kỳ — phù hợp tốc độ tăng trưởng lịch sử</div></div>
+          <div class="smart-cell"><div class="sl">R</div><div class="sn">Relevant</div><div class="sv">Ảnh hưởng trực tiếp revenue retention & LTV pool</div></div>
+          <div class="smart-cell"><div class="sl">T</div><div class="sn">Time-bound</div><div class="sv">Chốt số 30/04/2026, báo cáo 01/05/2026</div></div>
+        </div>
+        <div style="margin-top:10px;font-size:12.5px;color:var(--dim)">
+          <strong style="color:var(--text)">Kết quả thực:</strong> <span class="kv"><span class="kv-val up">312,840</span><span class="kv-u">KH</span></span> — <span style="color:#F59E0B">⚠ Chưa đạt target 315,000</span>, còn thiếu 2,160 KH. Cần win-back campaign trong tháng 4 để đạt cuối kỳ.
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 Analysis -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="ana">04</div><div class="lr-name">Analysis</div></div>
+      <div class="lr-content">
+        MoM: từ 307,100 (T3) → 312,840 (T4) =
+        <span class="kv"><span class="kv-val up">+5,740</span><span class="kv-u">KH · +1.9%</span></span>
+        tăng trưởng ổn định. Tuy nhiên, <strong>root cause quan trọng cần lưu ý:</strong><br><br>
+        <div class="code-box ana">
+          🔍 Root Cause #1: Nhóm "At Risk" chiếm 34.5% (108K KH) — những KH này sẽ tự động rơi khỏi Active window trong tháng tới nếu không có purchase. Đây là churn risk tiềm ẩn lớn nhất.<br><br>
+          🔍 Root Cause #2: Tăng trưởng net +5,740 KH thực ra được tạo ra bởi New + Reactive bù lại phần churn tự nhiên. Nếu win-back campaign yếu, con số sẽ đi ngang hoặc âm.
+        </div>
+        <div class="chart-block">
+          <div class="chart-title">📊 Waterfall — Biến động Active KH tháng 04/2026</div>
+          <canvas id="c1-waterfall" height="160"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 Recommendation -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="rec">05</div><div class="lr-name">Recommendation</div></div>
+      <div class="lr-content">
+        <ul class="al">
+          <li>Ưu tiên P0: Kích hoạt win-back ZNS cho toàn bộ <span class="tag red">108K KH At Risk</span> trong tuần 1 tháng 4 — mỗi tuần delay làm tỷ lệ phản hồi giảm ~8% theo pattern lịch sử.</li>
+          <li>Phân tầng thông điệp: Champions &amp; Loyal không cần discount mạnh (giảm 5% là đủ kích mua); At Risk cần offer rõ ràng hơn (voucher 50K hoặc free ship).</li>
+          <li>Đề xuất thêm metric tracking <span class="tag blue">Active-90d</span> song song với Active-12m — giúp Marketing phát hiện churn sớm hơn 9 tháng so với hiện tại.</li>
+        </ul>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px;font-family:var(--mono)">Owner: <span class="tag violet">Marketing Team</span> · Deadline: 07/04/2026 · Approval: PO CYO</div>
+      </div>
+    </div>
+
+    <!-- 06 Impact + Risk -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="imp">06</div><div class="lr-name">Impact + Risk</div></div>
+      <div class="lr-content">
+        <div class="ri-grid">
+          <div class="ri-box benefit">
+            <h4>✅ Kết quả kỳ vọng</h4>
+            <p>Nếu win-back campaign đạt 10% response rate trên 108K At Risk → +10,800 KH giữ lại Active, tương đương <strong style="color:#34D399">~9.6 tỷ VND LTV</strong> bảo vệ được (10,800 × 890K avg LTV). Metric đo: Active KH cuối T4 ≥ 315,000.</p>
+          </div>
+          <div class="ri-box risk">
+            <h4>⚠ Rủi ro & Giảm thiểu</h4>
+            <p><strong>Rủi ro 1:</strong> Gửi ZNS cho 108K KH gây unsubscribe hàng loạt nếu nội dung không relevant → Giảm thiểu: A/B test 2K mẫu trước khi blast full.<br><br><strong>Rủi ro 2:</strong> Định nghĩa Active 12m bị thay đổi bởi BI → Giảm thiểu: lock định nghĩa trong dbt README trước T4.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ Q2: NEW ══════════ -->
+<div class="q-card open" id="q2">
+  <div class="q-head" onclick="toggle('q2')">
+    <span class="q-badge">Q-02</span>
+    <span class="q-title">SL KH New (mua lần đầu) tháng 2026-04 là bao nhiêu?</span>
+    <span class="q-icon">+</span>
+  </div>
+  <div class="q-body">
+
+    <!-- 01 Context -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="ctx">01</div><div class="lr-name">Context</div></div>
+      <div class="lr-content">
+        <div class="ctx-block">
+          <div class="ctx-part">
+            <span class="ctx-tag">Tình hình hiện tại</span>
+            YODY đang chạy chiến dịch <span class="tag amber">Summer Sale 2026</span> trong tháng 4, kéo theo tăng chi phí paid ads trên Meta và TikTok. CMO yêu cầu đánh giá hiệu quả acquisition ngay cuối tháng để quyết định có tiếp tục rót ngân sách vào Q2 không — <span class="tag green">SL KH New</span> là KPI acquisition trực tiếp dùng để tính CAC và dự báo LTV pool tương lai.
+          </div>
+          <div class="ctx-part ctx-last">
+            <span class="ctx-tag">Giới hạn phạm vi</span>
+            Tính khách lần đầu tiên mua thành công trong tháng 4 (01–30/04/2026), không có bất kỳ đơn nào trước đó trong lịch sử. Chỉ tính đơn giao thành công — không tính đơn đặt chưa thanh toán hoặc đã huỷ. Kỳ đóng sổ 30/04/2026, không điều chỉnh sau khi khóa sổ.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 Observation -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="obs">02</div><div class="lr-name">Observation</div></div>
+      <div class="lr-content">
+        SL KH New tháng 04/2026:
+        <span class="kv"><span class="kv-val yd">18,420</span><span class="kv-u">KH</span></span><br><br>
+
+        <div class="chart-2col">
+          <div class="chart-block">
+            <div class="chart-title">📊 KH New theo kênh Acquisition</div>
+            <canvas id="c2-channel" height="200"></canvas>
+          </div>
+          <div class="chart-block">
+            <div class="chart-title">📈 Trend KH New — 6 tháng</div>
+            <canvas id="c2-trend" height="200"></canvas>
+          </div>
+        </div>
+
+        <table class="dt">
+          <thead><tr><th>Kênh</th><th>SL KH</th><th>Tỷ lệ</th><th>CAC (VND)</th><th>AOV (VND)</th></tr></thead>
+          <tbody>
+            <tr><td style="color:#60A5FA">Meta Ads</td><td>7,210</td><td>39.1%</td><td style="color:#F87171">185,000</td><td>348,000</td></tr>
+            <tr><td style="color:#F472B6">TikTok Ads</td><td>4,890</td><td>26.5%</td><td style="color:#34D399">132,000</td><td>312,000</td></tr>
+            <tr><td>Offline / POS</td><td>3,760</td><td>20.4%</td><td style="color:var(--muted)">—</td><td>425,000</td></tr>
+            <tr><td style="color:var(--dim)">Organic / Others</td><td>2,560</td><td>13.9%</td><td style="color:var(--muted)">—</td><td>380,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 03 Objective -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="obj">03</div><div class="lr-name">Objective</div></div>
+      <div class="lr-content">
+        <strong style="color:var(--text)">Mục tiêu acquisition tháng 04/2026:</strong><br><br>
+        <div class="smart-grid">
+          <div class="smart-cell"><div class="sl">S</div><div class="sn">Specific</div><div class="sv">Acquire 18,000+ KH New với CAC blended ≤ 160K VND</div></div>
+          <div class="smart-cell"><div class="sl">M</div><div class="sn">Measurable</div><div class="sv">SL KH New từ mart + ad spend từ Meta/TikTok API</div></div>
+          <div class="smart-cell"><div class="sl">A</div><div class="sn">Achievable</div><div class="sv">T3: 15,900 KH → T4 target +13% với Summer Sale campaign</div></div>
+          <div class="smart-cell"><div class="sl">R</div><div class="sn">Relevant</div><div class="sv">KH New tháng 4 = cohort LTV tương lai, quyết định Q3 revenue</div></div>
+          <div class="smart-cell"><div class="sl">T</div><div class="sn">Time-bound</div><div class="sv">Review giữa kỳ: 15/04 · Chốt: 30/04/2026</div></div>
+        </div>
+        <div style="margin-top:10px;font-size:12.5px;color:var(--dim)">
+          <strong style="color:var(--text)">Kết quả thực:</strong> <span class="kv"><span class="kv-val up">18,420</span><span class="kv-u">KH</span></span> — <span style="color:#34D399">✓ Đạt target</span>. CAC blended thực tế: <span class="kv"><span class="kv-val">163K</span><span class="kv-u">VND</span></span> — <span style="color:#F59E0B">≈ Sát ngưỡng, cần tối ưu kênh.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 Analysis -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="ana">04</div><div class="lr-name">Analysis</div></div>
+      <div class="lr-content">
+        MoM: 15,900 (T3) → 18,420 (T4) =
+        <span class="kv"><span class="kv-val up">+2,520</span><span class="kv-u">KH · +15.8%</span></span>
+        tăng tốt nhờ Summer Sale. Root cause cụ thể:<br><br>
+        <div class="code-box ana">
+          🔍 CAC Meta (185K) cao hơn TikTok (132K) 40% — nhưng AOV Meta (348K) cao hơn TikTok (312K).<br>
+          → Tỷ lệ CAC/AOV: Meta = 53.2% · TikTok = 42.3%<br>
+          → TikTok hiệu quả hơn về unit economics, nhưng Offline KH có AOV cao nhất (425K) với CAC = 0.<br><br>
+          🔍 Offline chiếm 20.4% KH New nhưng có AOV cao nhất — cho thấy trải nghiệm tại cửa hàng đang convert tốt cho high-value customers.
+        </div>
+        <div class="chart-block">
+          <div class="chart-title">💰 So sánh CAC vs AOV theo kênh (unit economics)</div>
+          <canvas id="c2-cac" height="150"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 Recommendation -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="rec">05</div><div class="lr-name">Recommendation</div></div>
+      <div class="lr-content">
+        <ul class="al">
+          <li><strong>P0 — Shift budget Meta → TikTok:</strong> Chuyển 15-20% budget Meta sang TikTok để tận dụng CAC thấp hơn. Cần xác nhận LTV-30d của 2 cohort tương đương trước khi quyết định (data available 01/05).</li>
+          <li><strong>P1 — Kích second purchase:</strong> Tạo segment <span class="tag green">New · Apr26 Cohort</span> trong CYO, gửi onboarding ZNS trong 7 ngày đầu tháng 5 để tăng repeat rate (benchmark: 20-25% mua lần 2 trong 60 ngày).</li>
+          <li><strong>P2 — Tăng Offline acquisition:</strong> AOV offline cao nhất (425K) — xem xét tăng activation event tại cửa hàng Q2/2026.</li>
+        </ul>
+        <div style="font-size:12px;color:var(--muted);margin-top:8px;font-family:var(--mono)">Owner: <span class="tag green">Marketing Team</span> · Deadline: 07/05/2026 · Approval: PO CYO</div>
+      </div>
+    </div>
+
+    <!-- 06 Impact + Risk -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="imp">06</div><div class="lr-name">Impact + Risk</div></div>
+      <div class="lr-content">
+        <div class="ri-grid">
+          <div class="ri-box benefit">
+            <h4>✅ Kết quả kỳ vọng</h4>
+            <p>18,420 KH New tháng 4 → nếu 22% mua lần 2 trong 60 ngày = <strong style="color:#34D399">+4,050 KH loyal mới</strong>, đóng góp ~6.7 tỷ VND incremental revenue (4,050 × AOV 2nd purchase ≈ 380K × 4.4 lần LTV trung bình). Đo bằng: cohort_repeat_rate_60d trong mart_customer_lifecycle.</p>
+          </div>
+          <div class="ri-box risk">
+            <h4>⚠ Rủi ro & Giảm thiểu</h4>
+            <p><strong>Rủi ro 1:</strong> CAC blended 163K vượt ngưỡng 160K → Giảm thiểu: review daily spend, tắt adset có CAC > 200K ngay lập tức.<br><br><strong>Rủi ro 2:</strong> Summer Sale tạo ra "deal hunters" — KH mua 1 lần vì giá, không quay lại → Giảm thiểu: track repeat rate cohort T4 và compare với T1/T2/T3.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ Q3: REACTIVE ══════════ -->
+<div class="q-card open" id="q3">
+  <div class="q-head" onclick="toggle('q3')">
+    <span class="q-badge">Q-03</span>
+    <span class="q-title">SL KH Reactive tháng 2026-04 là bao nhiêu?</span>
+    <span class="q-icon">+</span>
+  </div>
+  <div class="q-body">
+
+    <!-- 01 Context -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="ctx">01</div><div class="lr-name">Context</div></div>
+      <div class="lr-content">
+        <div class="ctx-block">
+          <div class="ctx-part">
+            <span class="ctx-tag">Tình hình hiện tại</span>
+            Đây là tháng đầu tiên CYO Agent chạy win-back campaign có hệ thống qua Zalo ZNS — trước đó Marketing thực hiện thủ công, không có tracking chuẩn. Ban lãnh đạo cần đánh giá ROI của kênh ZNS win-back so với paid acquisition để quyết định có scale ngân sách ZNS lên trong Q2 không.
+          </div>
+          <div class="ctx-part ctx-last">
+            <span class="ctx-tag">Giới hạn phạm vi</span>
+            Tính khách đã từng mua nhưng bỏ quên YODY trên 12 tháng, nay quay lại mua trong tháng 4. Không tính khách mua lần đầu. <span style="color:#FCA5A5">⚠ Lưu ý:</span> BI Team đang tính theo chuẩn bỏ quên 6 tháng — nếu dùng chuẩn đó, con số sẽ cao hơn đáng kể (~7,100 KH). Cần đồng thuận trước tháng 5.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 Observation -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="obs">02</div><div class="lr-name">Observation</div></div>
+      <div class="lr-content">
+        SL KH Reactive tháng 04/2026:
+        <span class="kv"><span class="kv-val yd">4,280</span><span class="kv-u">KH</span></span>
+        Win-back rate:
+        <span class="kv"><span class="kv-val up">2.3%</span><span class="kv-u">/ KH churned</span></span><br><br>
+
+        <div class="chart-2col">
+          <div class="chart-block">
+            <div class="chart-title">📊 Reactive KH theo độ dài churn</div>
+            <canvas id="c3-churn" height="200"></canvas>
+          </div>
+          <div class="chart-block">
+            <div class="chart-title">📈 Win-back Rate trend — 6 tháng</div>
+            <canvas id="c3-winback" height="200"></canvas>
+          </div>
+        </div>
+
+        <table class="dt">
+          <thead><tr><th>Khoảng churn</th><th>SL KH</th><th>AOV lần mua lại</th><th>Win-back Rate</th></tr></thead>
+          <tbody>
+            <tr><td>12 – 18 tháng</td><td>2,110</td><td style="color:#34D399">395,000</td><td style="color:#34D399">3.1%</td></tr>
+            <tr><td>18 – 24 tháng</td><td>1,340</td><td>360,000</td><td>2.0%</td></tr>
+            <tr><td>&gt; 24 tháng</td><td>830</td><td style="color:#F87171">320,000</td><td style="color:#F87171">0.9%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 03 Objective -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="obj">03</div><div class="lr-name">Objective</div></div>
+      <div class="lr-content">
+        <strong style="color:var(--text)">Mục tiêu win-back tháng 04/2026:</strong><br><br>
+        <div class="smart-grid">
+          <div class="smart-cell"><div class="sl">S</div><div class="sn">Specific</div><div class="sv">Tái kích hoạt ≥ 4,000 KH churned từ pool &gt;12 tháng</div></div>
+          <div class="smart-cell"><div class="sl">M</div><div class="sn">Measurable</div><div class="sv">Win-back rate ≥ 2.2% · Đo daily qua mart_reactive</div></div>
+          <div class="smart-cell"><div class="sl">A</div><div class="sn">Achievable</div><div class="sv">T3: 3,100 KH Reactive · T4 target +29% với ZNS campaign</div></div>
+          <div class="smart-cell"><div class="sl">R</div><div class="sn">Relevant</div><div class="sv">Reactive CAC thấp hơn 65% so với New → ROI cao hơn</div></div>
+          <div class="smart-cell"><div class="sl">T</div><div class="sn">Time-bound</div><div class="sv">30/04/2026 · Review: 15/04 (mid-month check)</div></div>
+        </div>
+        <div style="margin-top:10px;font-size:12.5px;color:var(--dim)">
+          <strong style="color:var(--text)">Kết quả thực:</strong> <span class="kv"><span class="kv-val up">4,280</span><span class="kv-u">KH</span></span> — <span style="color:#34D399">✓ Vượt target 7%</span>. Win-back rate 2.3% — <span style="color:#34D399">✓ Đạt.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 Analysis -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="ana">04</div><div class="lr-name">Analysis</div></div>
+      <div class="lr-content">
+        MoM: 3,100 (T3) → 4,280 (T4) =
+        <span class="kv"><span class="kv-val up">+1,180</span><span class="kv-u">KH · +38%</span></span>
+        — tăng mạnh nhờ ZNS win-back campaign lần đầu được chạy có hệ thống. Root cause:<br><br>
+        <div class="code-box ana">
+          🔍 Sweet spot rõ ràng: nhóm churn 12–18 tháng có win-back rate 3.1% + AOV cao nhất (395K) — đây là cohort ROI tốt nhất.<br><br>
+          🔍 Nhóm &gt;24 tháng: win-back rate 0.9%, AOV thấp nhất (320K). Chi phí ZNS gần như không có ROI dương cho nhóm này.<br><br>
+          🔍 So sánh: Reactive tháng 4 chiếm 18.8% tổng acquisition (Reactive + New = 22,700 KH). Với CAC Reactive ≈ 35–60K (ZNS cost only), đây là kênh hiệu quả nhất về chi phí.
+        </div>
+        <div class="chart-block">
+          <div class="chart-title">💡 ROI so sánh: Reactive vs New acquisition</div>
+          <canvas id="c3-roi" height="150"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 Recommendation -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="rec">05</div><div class="lr-name">Recommendation</div></div>
+      <div class="lr-content">
+        <ul class="al">
+          <li><strong>P0 — Focus vào nhóm 12–18 tháng:</strong> Scale tiếp ZNS win-back cho cohort này trong tháng 5. Tránh đầu tư ngân sách vào nhóm &gt;24 tháng (win-back rate quá thấp để đạt ROI dương).</li>
+          <li><strong>P0 — Align định nghĩa với BI:</strong> Resolve conflict "6 tháng vs 12 tháng" trước tháng 5 — lock chuẩn định nghĩa vào dbt README và Confluence để tránh báo cáo lệch nhau.</li>
+          <li><strong>P1 — Track repeat purchase Reactive:</strong> Tạo segment <span class="tag amber">Reactive · Apr26</span>, theo dõi purchase lần 2 trong 60 ngày — benchmark mục tiêu 30% (cao hơn New vì đã có brand familiarity).</li>
+        </ul>
+        <div style="font-size:12px;color:var(--muted);margin-top:8px;font-family:var(--mono)">Owner: <span class="tag amber">Marketing + BI Team</span> · Deadline: 07/05/2026 · Approval: PO CYO</div>
+      </div>
+    </div>
+
+    <!-- 06 Impact + Risk -->
+    <div class="layer-row">
+      <div class="lr-label"><div class="lr-badge" data-l="imp">06</div><div class="lr-name">Impact + Risk</div></div>
+      <div class="lr-content">
+        <div class="ri-grid">
+          <div class="ri-box benefit">
+            <h4>✅ Kết quả kỳ vọng</h4>
+            <p>4,280 KH Reactive với CAC ≈ 45K (ZNS) vs New CAC 163K → tiết kiệm <strong style="color:#34D399">~507 triệu VND chi phí acquisition</strong> so với nếu phải acquire 4,280 KH mới qua paid ads. Đo bằng: saved_cac = (CAC_new - CAC_reactive) × KH_reactive, report monthly.</p>
+          </div>
+          <div class="ri-box risk">
+            <h4>⚠ Rủi ro & Giảm thiểu</h4>
+            <p><strong>Rủi ro 1:</strong> Conflict định nghĩa 6m vs 12m khiến số Reactive bị double-count hoặc bỏ sót → Giảm thiểu: meeting BI + PO tuần 1 tháng 5, ra quyết định cứng.<br><br><strong>Rủi ro 2:</strong> KH Reactive mua lại vì discount — không trở thành loyal → Giảm thiểu: track 60-day repeat purchase trước khi mở rộng chiến dịch.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ INSTRUCTION SECTION ══════════ -->
+<div class="instr-wrap">
+  <div class="sec-label">Hướng dẫn sử dụng Framework</div>
+  <div class="instr-card">
+
+    <div class="instr-header">
+      <div class="instr-icon">📋</div>
+      <div class="instr-header-text">
+        <h3>CYO Response Standard — System Prompt &amp; Instruction</h3>
+        <p>Prompt mẫu · Breakdown từng tầng · Checklist kiểm tra · Anti-patterns cần tránh</p>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="instr-tabs">
+      <div class="instr-tab active" onclick="switchTab('system-prompt')">System Prompt</div>
+      <div class="instr-tab" onclick="switchTab('layer-guide')">Breakdown 6 tầng</div>
+      <div class="instr-tab" onclick="switchTab('checklist')">Checklist QA</div>
+      <div class="instr-tab" onclick="switchTab('antipattern')">Anti-patterns</div>
+    </div>
+
+    <!-- TAB 1: SYSTEM PROMPT -->
+    <div class="instr-pane active" id="tab-system-prompt">
+      <p style="font-size:13px;color:var(--dim);margin-bottom:16px;line-height:1.7">
+        Copy toàn bộ prompt dưới đây vào System Prompt của CYO Agent. Thay các placeholder <code style="font-family:var(--mono);color:#A78BFA;font-size:12px">{...}</code> bằng context thực tế trước khi deploy.
+      </p>
+      <div class="prompt-block">
+        <div class="prompt-topbar">
+          <span class="prompt-lang">SYSTEM PROMPT · CYO AGENT</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+        </div>
+        <pre class="prompt-code" id="main-prompt"><span class="pc"># VAI TRÒ</span>
+Bạn là CYO Agent — AI phân tích dữ liệu khách hàng nội bộ của YODY.
+Đối tượng người dùng: Marketing Team, BI Team, Product Owner.
+Ngôn ngữ trả lời: Tiếng Việt. Thuật ngữ kỹ thuật giữ nguyên tiếng Anh.
+
+<span class="pc"># QUY TẮC BẮT BUỘC</span>
+Mọi câu trả lời liên quan đến số liệu khách hàng PHẢI tuân theo
+cấu trúc <span class="py">6-Layer Response Standard</span> theo thứ tự sau:
+
+<span class="pk">## TẦNG 1 — CONTEXT (Bối cảnh)</span>
+Trình bày ĐỦ 2 phần, mỗi phần tách biệt rõ ràng:
+<span class="ps">→ Tình hình hiện tại:</span> Ai đang cần thông tin này, vì lý do gì,
+   tình trạng hiện tại của chỉ số là như thế nào.
+<span class="ps">→ Giới hạn phạm vi:</span> Định nghĩa metric bằng ngôn ngữ thông thường
+   (không dùng SQL hay code), các trường hợp bị loại trừ,
+   thời gian kỳ tính, nguồn dữ liệu. Nếu có conflict định nghĩa
+   giữa các team phải ghi rõ.
+
+<span class="pk">## TẦNG 2 — OBSERVATION (Thống kê & Dữ liệu)</span>
+<span class="ps">→</span> Nêu con số chính trước — không chôn số trong đoạn văn.
+<span class="ps">→</span> Bắt buộc có breakdown: theo kênh / nhóm / thời gian (nếu có).
+<span class="ps">→</span> Gắn chart/biểu đồ phù hợp với loại dữ liệu:
+   · Trend over time → Line chart
+   · Distribution (RFM, channel) → Bar hoặc Donut chart
+   · So sánh 2 biến → Grouped bar / Scatter
+<span class="ps">→</span> KHÔNG diễn giải ý nghĩa ở tầng này — chỉ trình bày fact.
+
+<span class="pk">## TẦNG 3 — OBJECTIVE (Mục tiêu)</span>
+<span class="ps">→</span> Nêu mục tiêu theo chuẩn SMART cho chỉ số đang xét.
+<span class="ps">→</span> Nếu đã có kết quả thực: so sánh target vs actual ngay tại đây.
+<span class="ps">→</span> Nếu chưa có target: đề xuất target dựa trên trend lịch sử.
+
+<span class="pk">## TẦNG 4 — ANALYSIS (Phân tích / Root Cause)</span>
+<span class="ps">→</span> Giải thích TẠI SAO con số lại như vậy — không chỉ mô tả lại số.
+<span class="ps">→</span> Chỉ ra ít nhất 1 root cause cụ thể, có evidence từ dữ liệu.
+<span class="ps">→</span> So sánh MoM hoặc YoY có kèm delta tuyệt đối và delta phần trăm.
+<span class="ps">→</span> Flag bất thường nếu có (anomaly, spike, sudden drop).
+
+<span class="pk">## TẦNG 5 — RECOMMENDATION (Khuyến nghị)</span>
+<span class="ps">→</span> Tối đa 3 hành động. Gắn nhãn ưu tiên: P0 / P1 / P2.
+<span class="ps">→</span> Mỗi hành động ghi rõ: Làm gì · Owner · Deadline.
+<span class="ps">→</span> Không được khuyến nghị chung chung (ví dụ: "cần theo dõi thêm").
+
+<span class="pk">## TẦNG 6 — IMPACT + RISK</span>
+<span class="ps">→ Kết quả kỳ vọng:</span> Lượng hóa benefit bằng số cụ thể (KH, VND,
+   %). Nêu metric dùng để đo kết quả và thời điểm review.
+<span class="ps">→ Rủi ro:</span> Nêu tối đa 2 rủi ro thực tế, kèm cách giảm thiểu.
+   Không liệt kê rủi ro lý thuyết không có khả năng xảy ra.
+
+<span class="pc"># NGUYÊN TẮC CHẤT LƯỢNG</span>
+✗ KHÔNG bắt đầu câu trả lời bằng lời chào hay xác nhận câu hỏi.
+✗ KHÔNG dùng số liệu ngoài phạm vi {<span class="ph">mart_customer_lifecycle</span>} và
+  {<span class="ph">mart_customer_acquisition</span>} trừ khi được chỉ định rõ.
+✗ KHÔNG suy diễn khi thiếu dữ liệu — ghi rõ "Chưa đủ data".
+✓ Nếu câu hỏi mơ hồ: hỏi lại đúng 1 câu làm rõ trước khi trả lời.
+✓ Luôn ghi nguồn dữ liệu và timestamp cập nhật gần nhất.</pre>
+      </div>
+    </div>
+
+    <!-- TAB 2: LAYER GUIDE -->
+    <div class="instr-pane" id="tab-layer-guide">
+      <p style="font-size:13px;color:var(--dim);margin-bottom:16px;line-height:1.7">
+        Mô tả chi tiết từng tầng — mục đích, nội dung bắt buộc, format đầu ra.
+      </p>
+      <table class="layer-breakdown">
+        <thead><tr>
+          <th style="width:36px">#</th>
+          <th style="width:120px">Tên tầng</th>
+          <th>Mục đích</th>
+          <th>Nội dung BẮT BUỘC</th>
+          <th style="width:130px">Format đầu ra</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="lb-num" style="color:#60A5FA">01</td>
+            <td style="color:#60A5FA;font-weight:600;font-family:var(--mono);font-size:12px">Context</td>
+            <td>Đặt bối cảnh để người đọc hiểu TẠI SAO câu hỏi này quan trọng và phạm vi của câu trả lời</td>
+            <td>
+              <span style="color:#34D399">①</span> Tình hình hiện tại<br>
+              <span style="color:#34D399">②</span> Giới hạn phạm vi — định nghĩa bằng ngôn ngữ thông thường, không dùng SQL; ghi rõ nếu có conflict định nghĩa giữa các team
+            </td>
+            <td style="font-family:var(--mono);font-size:11px;color:var(--muted)">2 khối phân tầng màu. Không dùng code làm nội dung chính.</td>
+          </tr>
+          <tr>
+            <td class="lb-num" style="color:#34D399">02</td>
+            <td style="color:#34D399;font-weight:600;font-family:var(--mono);font-size:12px">Observation</td>
+            <td>Trình bày số liệu thuần — không lẫn diễn giải, không lẫn opinion</td>
+            <td>
+              <span style="color:#34D399">①</span> Con số KPI chính (highlight rõ)<br>
+              <span style="color:#34D399">②</span> Breakdown theo ≥2 chiều (kênh, nhóm, thời gian)<br>
+              <span style="color:#34D399">③</span> Chart minh họa phù hợp loại dữ liệu
+            </td>
+            <td style="font-family:var(--mono);font-size:11px;color:var(--muted)">Số to + bold. Bảng có đơn vị. Chart có tiêu đề.</td>
+          </tr>
+          <tr>
+            <td class="lb-num" style="color:#FCAF17">03</td>
+            <td style="color:#FCAF17;font-weight:600;font-family:var(--mono);font-size:12px">Objective</td>
+            <td>Gắn số liệu vào mục tiêu kinh doanh để đánh giá tốt/xấu có căn cứ</td>
+            <td>
+              <span style="color:#34D399">①</span> Target SMART cho kỳ đang xét<br>
+              <span style="color:#34D399">②</span> Actual vs Target so sánh<br>
+              <span style="color:#34D399">③</span> Đánh giá đạt/không đạt kèm delta
+            </td>
+            <td style="font-family:var(--mono);font-size:11px;color:var(--muted)">SMART grid 5 ô. Verdict rõ ràng (✓/✗).</td>
+          </tr>
+          <tr>
+            <td class="lb-num" style="color:#A78BFA">04</td>
+            <td style="color:#A78BFA;font-weight:600;font-family:var(--mono);font-size:12px">Analysis</td>
+            <td>Giải thích nguyên nhân gốc rễ — biến observation từ "what" thành "why"</td>
+            <td>
+              <span style="color:#34D399">①</span> MoM hoặc YoY delta (số tuyệt đối + %)<br>
+              <span style="color:#34D399">②</span> ≥1 root cause cụ thể có evidence<br>
+              <span style="color:#34D399">③</span> Flag bất thường nếu có
+            </td>
+            <td style="font-family:var(--mono);font-size:11px;color:var(--muted)">Code-box cho insight. Chart so sánh nếu cần.</td>
+          </tr>
+          <tr>
+            <td class="lb-num" style="color:#FB923C">05</td>
+            <td style="color:#FB923C;font-weight:600;font-family:var(--mono);font-size:12px">Recommendation</td>
+            <td>Chuyển insight thành hành động cụ thể, có người chịu trách nhiệm</td>
+            <td>
+              <span style="color:#34D399">①</span> Tối đa 3 hành động (P0/P1/P2)<br>
+              <span style="color:#34D399">②</span> Mỗi action: Làm gì + Owner + Deadline<br>
+              <span style="color:#34D399">③</span> Không có hành động chung chung
+            </td>
+            <td style="font-family:var(--mono);font-size:11px;color:var(--muted)">Danh sách → ký hiệu. Owner ghi rõ team.</td>
+          </tr>
+          <tr>
+            <td class="lb-num" style="color:#F472B6">06</td>
+            <td style="color:#F472B6;font-weight:600;font-family:var(--mono);font-size:12px">Impact + Risk</td>
+            <td>Lượng hóa kết quả kỳ vọng và rủi ro để người ra quyết định cân nhắc</td>
+            <td>
+              <span style="color:#34D399">①</span> Benefit lượng hóa bằng số (KH, VND, %)<br>
+              <span style="color:#34D399">②</span> Metric đo kết quả + thời điểm review<br>
+              <span style="color:#34D399">③</span> ≤2 rủi ro thực tế + cách giảm thiểu
+            </td>
+            <td style="font-family:var(--mono);font-size:11px;color:var(--muted)">2-cột: Benefit | Risk. Không liệt kê rủi ro lý thuyết.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TAB 3: CHECKLIST -->
+    <div class="instr-pane" id="tab-checklist">
+      <p style="font-size:13px;color:var(--dim);margin-bottom:20px;line-height:1.7">
+        Dùng checklist này để QA câu trả lời trước khi publish hoặc trình bày với stakeholder.
+      </p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div>
+          <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#34D399;margin-bottom:12px">✅ Bắt buộc có</div>
+          <ul class="chk-list do">
+            <li><span class="ico">✓</span>Context có đủ 3 phần: tình hình · lý do · phạm vi</li>
+            <li><span class="ico">✓</span>Observation: con số KPI được highlight riêng, không chôn trong đoạn văn</li>
+            <li><span class="ico">✓</span>Có ít nhất 1 chart phù hợp loại dữ liệu</li>
+            <li><span class="ico">✓</span>Objective có target SMART và verdict đạt/không đạt</li>
+            <li><span class="ico">✓</span>Analysis có so sánh MoM/YoY với delta tuyệt đối + %</li>
+            <li><span class="ico">✓</span>Analysis giải thích "tại sao" — không chỉ mô tả lại số</li>
+            <li><span class="ico">✓</span>Recommendation có nhãn P0/P1/P2 và owner rõ ràng</li>
+            <li><span class="ico">✓</span>Impact lượng hóa được bằng số cụ thể (không chỉ "sẽ tốt hơn")</li>
+            <li><span class="ico">✓</span>Risk đề xuất cách giảm thiểu cụ thể</li>
+            <li><span class="ico">✓</span>Ghi nguồn dữ liệu và timestamp cập nhật</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#F87171;margin-bottom:12px">✗ Không được phép</div>
+          <ul class="chk-list dont">
+            <li><span class="ico">✗</span>Bắt đầu bằng "Dạ, câu hỏi của bạn là..." hoặc lặp lại câu hỏi</li>
+            <li><span class="ico">✗</span>Dùng SQL công thức làm nội dung chính của tầng Context</li>
+            <li><span class="ico">✗</span>Lẫn diễn giải vào tầng Observation (chỉ trình bày fact)</li>
+            <li><span class="ico">✗</span>Target SMART không có deadline cụ thể</li>
+            <li><span class="ico">✗</span>Analysis chỉ nói "tăng do campaign" mà không nêu evidence</li>
+            <li><span class="ico">✗</span>Recommendation chung chung: "cần theo dõi thêm" / "cần cải thiện"</li>
+            <li><span class="ico">✗</span>Impact chỉ mô tả định tính: "sẽ tốt hơn", "có thể cải thiện"</li>
+            <li><span class="ico">✗</span>Liệt kê rủi ro lý thuyết không có khả năng xảy ra cao</li>
+            <li><span class="ico">✗</span>Dùng số liệu ngoài phạm vi mart đã được xác nhận</li>
+            <li><span class="ico">✗</span>Bỏ qua conflict định nghĩa metric giữa các team</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: ANTI-PATTERNS -->
+    <div class="instr-pane" id="tab-antipattern">
+      <p style="font-size:13px;color:var(--dim);margin-bottom:20px;line-height:1.7">
+        Các lỗi phổ biến nhất trong câu trả lời AI về dữ liệu khách hàng — và cách sửa.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:14px">
+
+        <div style="background:var(--bg-card);border:1px solid rgba(239,68,68,.15);border-radius:var(--r-sm);overflow:hidden">
+          <div style="background:rgba(239,68,68,.07);padding:10px 16px;border-bottom:1px solid rgba(239,68,68,.12);font-family:var(--mono);font-size:11px;font-weight:700;color:#F87171;letter-spacing:.8px">ANTI-PATTERN #1 — Context = Định nghĩa kỹ thuật</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+            <div style="padding:14px 16px;border-right:1px solid var(--border)">
+              <div style="font-family:var(--mono);font-size:10px;color:#F87171;font-weight:600;margin-bottom:8px">✗ SAI</div>
+              <div style="font-size:12.5px;color:var(--dim);line-height:1.7">"KH Active = COUNT(DISTINCT customer_id) WHERE last_order_date &gt;= DATE_SUB(CURRENT_DATE, INTERVAL 12 MONTH). Nguồn: BigQuery mart_customer_lifecycle..."</div>
+            </div>
+            <div style="padding:14px 16px">
+              <div style="font-family:var(--mono);font-size:10px;color:#34D399;font-weight:600;margin-bottom:8px">✓ ĐÚNG</div>
+              <div style="font-size:12.5px;color:var(--dim);line-height:1.7">"Marketing đang chuẩn bị ngân sách win-back Q2. Câu hỏi xuất hiện vì nhóm At Risk tăng trong T3. Phạm vi: đơn hoàn tất, 12 tháng, loại trừ KH bị xóa."</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:var(--bg-card);border:1px solid rgba(239,68,68,.15);border-radius:var(--r-sm);overflow:hidden">
+          <div style="background:rgba(239,68,68,.07);padding:10px 16px;border-bottom:1px solid rgba(239,68,68,.12);font-family:var(--mono);font-size:11px;font-weight:700;color:#F87171;letter-spacing:.8px">ANTI-PATTERN #2 — Observation lẫn diễn giải</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+            <div style="padding:14px 16px;border-right:1px solid var(--border)">
+              <div style="font-family:var(--mono);font-size:10px;color:#F87171;font-weight:600;margin-bottom:8px">✗ SAI</div>
+              <div style="font-size:12.5px;color:var(--dim);line-height:1.7">"SL KH New tháng 4 là 18,420 — con số này cho thấy campaign Summer Sale đang hoạt động hiệu quả và team cần tiếp tục đầu tư."</div>
+            </div>
+            <div style="padding:14px 16px">
+              <div style="font-family:var(--mono);font-size:10px;color:#34D399;font-weight:600;margin-bottom:8px">✓ ĐÚNG</div>
+              <div style="font-size:12.5px;color:var(--dim);line-height:1.7">"SL KH New tháng 4: <strong style="color:var(--text)">18,420 KH</strong>. Breakdown: Meta 7,210 (39.1%) · TikTok 4,890 (26.5%) · Offline 3,760 (20.4%) · Organic 2,560 (13.9%)." <em style="color:var(--muted)">[diễn giải để tầng 04]</em></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:var(--bg-card);border:1px solid rgba(239,68,68,.15);border-radius:var(--r-sm);overflow:hidden">
+          <div style="background:rgba(239,68,68,.07);padding:10px 16px;border-bottom:1px solid rgba(239,68,68,.12);font-family:var(--mono);font-size:11px;font-weight:700;color:#F87171;letter-spacing:.8px">ANTI-PATTERN #3 — Recommendation chung chung, không có owner</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+            <div style="padding:14px 16px;border-right:1px solid var(--border)">
+              <div style="font-family:var(--mono);font-size:10px;color:#F87171;font-weight:600;margin-bottom:8px">✗ SAI</div>
+              <div style="font-size:12.5px;color:var(--dim);line-height:1.7">"Cần theo dõi chặt hơn nhóm At Risk. Nên xem xét việc tối ưu lại chiến lược marketing để cải thiện retention trong thời gian tới."</div>
+            </div>
+            <div style="padding:14px 16px">
+              <div style="font-family:var(--mono);font-size:10px;color:#34D399;font-weight:600;margin-bottom:8px">✓ ĐÚNG</div>
+              <div style="font-size:12.5px;color:var(--dim);line-height:1.7">"<strong style="color:var(--text)">P0:</strong> Kích hoạt ZNS win-back cho 108K KH At Risk trước 07/04. <strong style="color:var(--text)">Owner: Marketing Team.</strong> Nếu delay 1 tuần, response rate giảm ~8% theo pattern lịch sử."</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:var(--bg-card);border:1px solid rgba(239,68,68,.15);border-radius:var(--r-sm);overflow:hidden">
+          <div style="background:rgba(239,68,68,.07);padding:10px 16px;border-bottom:1px solid rgba(239,68,68,.12);font-family:var(--mono);font-size:11px;font-weight:700;color:#F87171;letter-spacing:.8px">ANTI-PATTERN #4 — Impact định tính, không đo được</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+            <div style="padding:14px 16px;border-right:1px solid var(--border)">
+              <div style="font-family:var(--mono);font-size:10px;color:#F87171;font-weight:600;margin-bottom:8px">✗ SAI</div>
+              <div style="font-size:12.5px;color:var(--dim);line-height:1.7">"Nếu thực hiện đúng, chiến dịch win-back sẽ giúp cải thiện retention đáng kể và tăng doanh thu cho công ty trong dài hạn."</div>
+            </div>
+            <div style="padding:14px 16px">
+              <div style="font-family:var(--mono);font-size:10px;color:#34D399;font-weight:600;margin-bottom:8px">✓ ĐÚNG</div>
+              <div style="font-size:12.5px;color:var(--dim);line-height:1.7">"Win-back 10% trên 108K At Risk = +10,800 KH giữ lại, bảo vệ <strong style="color:#34D399">~9.6 tỷ VND LTV</strong>. Đo bằng Active KH cuối T4 ≥ 315,000. Review: 01/05/2026."</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>CYO · 6-Layer Response Standard · v2.0 · 2026-05</span>
+  <span>Context · Observation · Objective · Analysis · Recommendation · Impact</span>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+/* ── TAB SWITCHING ── */
+function switchTab(id) {
+  document.querySelectorAll('.instr-tab').forEach((t,i) => {
+    const ids = ['system-prompt','layer-guide','checklist','antipattern'];
+    t.classList.toggle('active', ids[i] === id);
+  });
+  document.querySelectorAll('.instr-pane').forEach(p => {
+    p.classList.toggle('active', p.id === 'tab-' + id);
+  });
+}
+
+/* ── COPY PROMPT ── */
+function copyPrompt(btn) {
+  const text = document.getElementById('main-prompt').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+/* ── TOGGLE Q CARDS ── */
+function toggle(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+/* ── CHART DEFAULTS ── */
+Chart.defaults.color = '#6B7280';
+Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+Chart.defaults.font.size = 11;
+
+const gridColor = 'rgba(255,255,255,0.05)';
+const tooltipOpts = {
+  backgroundColor: '#1A1D26',
+  borderColor: 'rgba(252,175,23,0.3)',
+  borderWidth: 1,
+  titleColor: '#E6EAF4',
+  bodyColor: '#9CA3AF',
+  padding: 10,
+  cornerRadius: 6,
+};
+
+/* ══ Q1 Charts ══ */
+// Trend line
+new Chart(document.getElementById('c1-trend'), {
+  type: 'line',
+  data: {
+    labels: ['T11/25','T12/25','T1/26','T2/26','T3/26','T4/26'],
+    datasets: [{
+      label: 'KH Active',
+      data: [291400, 296800, 300200, 303900, 307100, 312840],
+      borderColor: '#FCAF17',
+      backgroundColor: 'rgba(252,175,23,0.08)',
+      borderWidth: 2,
+      pointBackgroundColor: '#FCAF17',
+      pointRadius: 4,
+      fill: true,
+      tension: 0.4,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: tooltipOpts },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { font: { size: 10 } } },
+      y: {
+        grid: { color: gridColor },
+        ticks: { callback: v => (v/1000).toFixed(0)+'K', font: { size: 10 } }
+      }
+    }
+  }
+});
+
+// RFM donut
+new Chart(document.getElementById('c1-rfm'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Champions','Loyal','Potential','At Risk'],
+    datasets: [{
+      data: [47200, 68500, 89140, 108000],
+      backgroundColor: ['#34D399','#60A5FA','#FCD34D','#F87171'],
+      borderColor: '#0B0D12',
+      borderWidth: 3,
+      hoverOffset: 6,
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '62%',
+    plugins: {
+      legend: { position: 'bottom', labels: { padding: 12, font: { size: 10 } } },
+      tooltip: tooltipOpts,
+    }
+  }
+});
+
+// Waterfall bar
+new Chart(document.getElementById('c1-waterfall'), {
+  type: 'bar',
+  data: {
+    labels: ['Active T3','+ New','+ Reactive','– Churn','Active T4'],
+    datasets: [{
+      label: 'KH',
+      data: [307100, 18420, 4280, -16960, 312840],
+      backgroundColor: [
+        '#4B5563','#34D399','#FCAF17','#F87171','#FCAF17'
+      ],
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: tooltipOpts },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { font: { size: 10 } } },
+      y: {
+        grid: { color: gridColor },
+        ticks: { callback: v => (v/1000).toFixed(0)+'K', font: { size: 10 } },
+        min: 0
+      }
+    }
+  }
+});
+
+/* ══ Q2 Charts ══ */
+// Channel bar
+new Chart(document.getElementById('c2-channel'), {
+  type: 'bar',
+  data: {
+    labels: ['Meta Ads','TikTok Ads','Offline/POS','Organic'],
+    datasets: [{
+      label: 'SL KH New',
+      data: [7210, 4890, 3760, 2560],
+      backgroundColor: ['#60A5FA','#F472B6','#A78BFA','#6B7280'],
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    indexAxis: 'y',
+    plugins: { legend: { display: false }, tooltip: tooltipOpts },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { font: { size: 10 } } },
+      y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// Trend line New
+new Chart(document.getElementById('c2-trend'), {
+  type: 'line',
+  data: {
+    labels: ['T11/25','T12/25','T1/26','T2/26','T3/26','T4/26'],
+    datasets: [{
+      label: 'KH New',
+      data: [13200, 16800, 12100, 13400, 15900, 18420],
+      borderColor: '#34D399',
+      backgroundColor: 'rgba(52,211,153,0.08)',
+      borderWidth: 2,
+      pointBackgroundColor: '#34D399',
+      pointRadius: 4,
+      fill: true,
+      tension: 0.4,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: tooltipOpts },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { font: { size: 10 } } },
+      y: { grid: { color: gridColor }, ticks: { callback: v => (v/1000).toFixed(1)+'K', font: { size: 10 } } }
+    }
+  }
+});
+
+// CAC vs AOV grouped
+new Chart(document.getElementById('c2-cac'), {
+  type: 'bar',
+  data: {
+    labels: ['Meta Ads','TikTok Ads'],
+    datasets: [
+      {
+        label: 'CAC (VND)',
+        data: [185000, 132000],
+        backgroundColor: 'rgba(248,113,113,0.7)',
+        borderRadius: 4,
+      },
+      {
+        label: 'AOV (VND)',
+        data: [348000, 312000],
+        backgroundColor: 'rgba(252,175,23,0.7)',
+        borderRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 10 } },
+      tooltip: tooltipOpts,
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+      y: { grid: { color: gridColor }, ticks: { callback: v => (v/1000)+'K', font: { size: 10 } } }
+    }
+  }
+});
+
+/* ══ Q3 Charts ══ */
+// Churn cohort bar
+new Chart(document.getElementById('c3-churn'), {
+  type: 'bar',
+  data: {
+    labels: ['12–18 tháng','18–24 tháng','> 24 tháng'],
+    datasets: [{
+      label: 'SL KH Reactive',
+      data: [2110, 1340, 830],
+      backgroundColor: ['#FCAF17','#F59E0B','#92400E'],
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: tooltipOpts },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+      y: { grid: { color: gridColor }, ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// Win-back rate trend
+new Chart(document.getElementById('c3-winback'), {
+  type: 'line',
+  data: {
+    labels: ['T11/25','T12/25','T1/26','T2/26','T3/26','T4/26'],
+    datasets: [{
+      label: 'Win-back Rate',
+      data: [1.1, 1.4, 1.3, 1.7, 1.8, 2.3],
+      borderColor: '#F472B6',
+      backgroundColor: 'rgba(244,114,182,0.08)',
+      borderWidth: 2,
+      pointBackgroundColor: '#F472B6',
+      pointRadius: 4,
+      fill: true,
+      tension: 0.4,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false }, tooltip: tooltipOpts },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { font: { size: 10 } } },
+      y: { grid: { color: gridColor }, ticks: { callback: v => v+'%', font: { size: 10 } } }
+    }
+  }
+});
+
+// ROI comparison
+new Chart(document.getElementById('c3-roi'), {
+  type: 'bar',
+  data: {
+    labels: ['KH New (blended)', 'KH Reactive'],
+    datasets: [
+      {
+        label: 'CAC (VND)',
+        data: [163000, 45000],
+        backgroundColor: ['rgba(248,113,113,0.7)', 'rgba(252,175,23,0.7)'],
+        borderRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false },
+      tooltip: tooltipOpts,
+      annotation: {},
+    },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { callback: v => (v/1000)+'K', font: { size: 10 } } },
+      y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+    }
+  }
+});
+</script>
+</body>
+</html>
