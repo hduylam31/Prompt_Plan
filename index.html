@@ -790,7 +790,71 @@ canvas{max-width:100%}
           <li>Phân tầng thông điệp: Champions &amp; Loyal không cần discount mạnh (giảm 5% là đủ kích mua); At Risk cần offer rõ ràng hơn (voucher 50K hoặc free ship).</li>
           <li>Đề xuất thêm metric tracking <span class="tag blue">Active-90d</span> song song với Active-12m — giúp Marketing phát hiện churn sớm hơn 9 tháng so với hiện tại.</li>
         </ul>
-        <div style="font-size:12px;color:var(--muted);margin-top:6px;font-family:var(--mono)">Owner: <span class="tag violet">Marketing Team</span> · Deadline: 07/04/2026 · Approval: PO CYO</div>
+
+        <!-- CAMPAIGN TEMPLATES Q1 -->
+        <div style="margin-top:16px;border:1px solid rgba(245,158,11,.25);border-radius:10px;overflow:hidden">
+          <div style="background:rgba(245,158,11,.08);padding:8px 14px;font-family:var(--mono);font-size:11px;font-weight:700;color:#F59E0B;letter-spacing:.8px;display:flex;align-items:center;gap:8px">
+            <span>📨</span> CAMPAIGN TEMPLATES — Win-back At Risk · Q1
+          </div>
+          <div style="padding:14px;display:grid;gap:10px">
+
+            <!-- Template 1 -->
+            <div style="border:1px solid rgba(255,255,255,.07);border-radius:8px;overflow:hidden">
+              <div style="background:rgba(255,255,255,.04);padding:7px 12px;display:flex;align-items:center;justify-content:space-between">
+                <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:#34D399">TPL-01 · Zalo ZNS · At Risk (90–180 ngày)</span>
+                <span style="font-size:10px;color:var(--muted)">Segment: Ngủ Đông Nhẹ · ~60K data · Voucher OFF</span>
+              </div>
+              <div style="padding:10px 14px">
+                <div style="font-family:var(--mono);font-size:12.5px;color:var(--text);line-height:1.8;background:rgba(0,0,0,.2);padding:10px 12px;border-radius:6px;white-space:pre-wrap">YODY.VN nhớ {{first_name}} 🙌 Đã lâu chưa ghé — riêng cho {{tier}}, VOUCHER {{discount_value}} áp dụng đơn nguyên giá ≥499K (Mã: {{promo_code}}). HSD: {{expiry_date}}. Ghé CH {{store_nearby}} ngay nhé. LH: 18002086.</div>
+                <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+                  <span style="font-size:11px;background:rgba(52,211,153,.1);color:#34D399;padding:2px 8px;border-radius:4px">✓ ≤160 ký tự</span>
+                  <span style="font-size:11px;background:rgba(96,165,250,.1);color:#60A5FA;padding:2px 8px;border-radius:4px">Biến: {{first_name}} {{tier}} {{discount_value}} {{promo_code}} {{expiry_date}} {{store_nearby}}</span>
+                  <span style="font-size:11px;background:rgba(245,158,11,.1);color:#F59E0B;padding:2px 8px;border-radius:4px">Tone: Ấm áp · Gần gũi</span>
+                  <span style="font-size:11px;background:rgba(167,139,250,.1);color:#A78BFA;padding:2px 8px;border-radius:4px">No discount default: OFF — cần PO enable</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Template 2 -->
+            <div style="border:1px solid rgba(255,255,255,.07);border-radius:8px;overflow:hidden">
+              <div style="background:rgba(255,255,255,.04);padding:7px 12px;display:flex;align-items:center;justify-content:space-between">
+                <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:#60A5FA">TPL-02 · Zalo ZNS · Champions & Loyal (churn risk nhẹ)</span>
+                <span style="font-size:10px;color:var(--muted)">Segment: VIP Gold · ~48K data · No discount</span>
+              </div>
+              <div style="padding:10px 14px">
+                <div style="font-family:var(--mono);font-size:12.5px;color:var(--text);line-height:1.8;background:rgba(0,0,0,.2);padding:10px 12px;border-radius:6px;white-space:pre-wrap">{{first_name}} ơi, BST {{season_event}} vừa ra mắt — nhiều mẫu mới dành riêng cho hạng {{tier}}. Ghé {{store_nearby}} xem trước hoặc xem ngay tại YODY.VN nhé. LH: 18002086.</div>
+                <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+                  <span style="font-size:11px;background:rgba(52,211,153,.1);color:#34D399;padding:2px 8px;border-radius:4px">✓ ≤160 ký tự</span>
+                  <span style="font-size:11px;background:rgba(96,165,250,.1);color:#60A5FA;padding:2px 8px;border-radius:4px">Biến: {{first_name}} {{season_event}} {{tier}} {{store_nearby}}</span>
+                  <span style="font-size:11px;background:rgba(245,158,11,.1);color:#F59E0B;padding:2px 8px;border-radius:4px">Tone: Chuyên nghiệp · Exclusive</span>
+                  <span style="font-size:11px;background:rgba(52,211,153,.1);color:#34D399;padding:2px 8px;border-radius:4px">No discount — đúng rule no-discount-default</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Template 3 -->
+            <div style="border:1px solid rgba(255,255,255,.07);border-radius:8px;overflow:hidden">
+              <div style="background:rgba(255,255,255,.04);padding:7px 12px;display:flex;align-items:center;justify-content:space-between">
+                <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:#F87171">TPL-03 · SMS · Ngủ Đông Nặng (>180 ngày)</span>
+                <span style="font-size:10px;color:var(--muted)">Segment: Ngủ Đông Nặng · A/B test 5K trước · Voucher mạnh</span>
+              </div>
+              <div style="padding:10px 14px">
+                <div style="font-family:var(--mono);font-size:12.5px;color:var(--text);line-height:1.8;background:rgba(0,0,0,.2);padding:10px 12px;border-radius:6px;white-space:pre-wrap">YODY.VN Tang ban {{first_name}} VOUCHER {{discount_value}} ap dung don nguyen gia 499K (Ma: {{promo_code}}). HSD: {{expiry_date}}. Ghe YODY trai nghiem {{last_product}} moi ngay nhe. LH: 18002086.</div>
+                <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+                  <span style="font-size:11px;background:rgba(52,211,153,.1);color:#34D399;padding:2px 8px;border-radius:4px">✓ ≤160 ký tự (no dấu)</span>
+                  <span style="font-size:11px;background:rgba(96,165,250,.1);color:#60A5FA;padding:2px 8px;border-radius:4px">Biến: {{first_name}} {{discount_value}} {{promo_code}} {{expiry_date}} {{last_product}}</span>
+                  <span style="font-size:11px;background:rgba(248,113,113,.1);color:#F87171;padding:2px 8px;border-radius:4px">⚠ A/B test 5K mẫu trước blast · PO approve required</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="font-size:11.5px;color:var(--dim);padding:4px 2px;line-height:1.7">
+              ⚙ <strong style="color:var(--text)">Ràng buộc kỹ thuật áp dụng:</strong> Không dùng discount trừ khi PO enable · Biến phải thuộc whitelist Sheet "Biến theo Kênh" · ZNS ≤300 ký tự, SMS ≤160 ký tự không dấu · Không chứa PII raw (phone/CCCD) trong nội dung · Cần ZNS Template ID approved từ Zalo trước khi gửi thật.
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:12px;color:var(--muted);margin-top:8px;font-family:var(--mono)">Owner: <span class="tag violet">Marketing Team</span> · Deadline: 07/04/2026 · Approval: PO CYO</div>
       </div>
     </div>
 
@@ -810,6 +874,18 @@ canvas{max-width:100%}
         </div>
       </div>
     </div>
+
+    <!-- 07 Feedback -->
+    <div class="layer-row" style="border-top:1px solid rgba(255,255,255,.06);margin-top:4px">
+      <div class="lr-label"><div class="lr-badge" style="background:rgba(255,255,255,.06);color:var(--dim)">✦</div><div class="lr-name" style="color:var(--dim)">Phản hồi</div></div>
+      <div class="lr-content">
+        <div style="font-size:13px;color:var(--dim);line-height:1.8;padding:6px 0">
+          Câu trả lời trên có hợp lý không? <strong style="color:var(--text)">(CÓ / KHÔNG)</strong> — Nếu chưa, hãy mô tả ngay bên dưới để team cải thiện CYO.<br>
+          <span style="font-size:12px;color:rgba(255,255,255,.25)">Ví dụ: &ldquo;Có&rdquo; &nbsp;·&nbsp; &ldquo;Không vì số Reactive tháng 4 thực tế khác với con số hệ thống đang hiển thị...&rdquo;</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -916,6 +992,69 @@ canvas{max-width:100%}
           <li><strong>P1 — Kích second purchase:</strong> Tạo segment <span class="tag green">New · Apr26 Cohort</span> trong CYO, gửi onboarding ZNS trong 7 ngày đầu tháng 5 để tăng repeat rate (benchmark: 20-25% mua lần 2 trong 60 ngày).</li>
           <li><strong>P2 — Tăng Offline acquisition:</strong> AOV offline cao nhất (425K) — xem xét tăng activation event tại cửa hàng Q2/2026.</li>
         </ul>
+
+        <!-- CAMPAIGN TEMPLATES Q2 -->
+        <div style="margin-top:16px;border:1px solid rgba(52,211,153,.25);border-radius:10px;overflow:hidden">
+          <div style="background:rgba(52,211,153,.08);padding:8px 14px;font-family:var(--mono);font-size:11px;font-weight:700;color:#34D399;letter-spacing:.8px;display:flex;align-items:center;gap:8px">
+            <span>📨</span> CAMPAIGN TEMPLATES — New Customer Onboarding · Q2
+          </div>
+          <div style="padding:14px;display:grid;gap:10px">
+
+            <!-- Template 1 -->
+            <div style="border:1px solid rgba(255,255,255,.07);border-radius:8px;overflow:hidden">
+              <div style="background:rgba(255,255,255,.04);padding:7px 12px;display:flex;align-items:center;justify-content:space-between">
+                <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:#34D399">TPL-04 · Zalo ZNS · Onboarding ngày 1–3 (kích mua lần 2)</span>
+                <span style="font-size:10px;color:var(--muted)">Segment: New · Apr26 Cohort · 18,420 data · No discount</span>
+              </div>
+              <div style="padding:10px 14px">
+                <div style="font-family:var(--mono);font-size:12.5px;color:var(--text);line-height:1.8;background:rgba(0,0,0,.2);padding:10px 12px;border-radius:6px;white-space:pre-wrap">Chào {{first_name}}, cảm ơn bạn đã chọn YODY 🎉 Dựa vào đơn {{last_product}} vừa mua, bạn có thể thích thêm các mẫu mới tại {{store_nearby}} hoặc YODY.VN. Khám phá ngay nhé! LH: 18002086.</div>
+                <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+                  <span style="font-size:11px;background:rgba(52,211,153,.1);color:#34D399;padding:2px 8px;border-radius:4px">✓ ≤300 ký tự ZNS</span>
+                  <span style="font-size:11px;background:rgba(96,165,250,.1);color:#60A5FA;padding:2px 8px;border-radius:4px">Biến: {{first_name}} {{last_product}} {{store_nearby}}</span>
+                  <span style="font-size:11px;background:rgba(245,158,11,.1);color:#F59E0B;padding:2px 8px;border-radius:4px">Tone: Ấm áp · Gần gũi</span>
+                  <span style="font-size:11px;background:rgba(52,211,153,.1);color:#34D399;padding:2px 8px;border-radius:4px">No discount — rule tuân thủ</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Template 2 -->
+            <div style="border:1px solid rgba(255,255,255,.07);border-radius:8px;overflow:hidden">
+              <div style="background:rgba(255,255,255,.04);padding:7px 12px;display:flex;align-items:center;justify-content:space-between">
+                <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:#F472B6">TPL-05 · Meta Ads Retarget · Kéo mua lần 2 (TikTok Cohort)</span>
+                <span style="font-size:10px;color:var(--muted)">Segment: New từ TikTok · 4,890 data · Upload Custom Audience</span>
+              </div>
+              <div style="padding:10px 14px">
+                <div style="font-size:12.5px;color:var(--dim);line-height:1.7;padding:6px 0">Gói nội dung quảng cáo cross-channel: Upload 4,890 KH New từ TikTok làm Custom Audience trên Meta. Chạy retarget trong 30 ngày với creative tập trung vào sản phẩm tương tự <strong style="color:var(--text)">{{last_product}}</strong> và message <em>"Hàng mới về — tiếp tục khám phá YODY"</em>. Không dùng discount để bảo vệ margin.</div>
+                <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+                  <span style="font-size:11px;background:rgba(244,114,182,.1);color:#F472B6;padding:2px 8px;border-radius:4px">Kênh: Meta Custom Audience</span>
+                  <span style="font-size:11px;background:rgba(96,165,250,.1);color:#60A5FA;padding:2px 8px;border-radius:4px">Biến: {{last_product}} {{city}}</span>
+                  <span style="font-size:11px;background:rgba(245,158,11,.1);color:#F59E0B;padding:2px 8px;border-radius:4px">KPI: ROAS ≥ 3x · CPO ≤ 132K</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Template 3 -->
+            <div style="border:1px solid rgba(255,255,255,.07);border-radius:8px;overflow:hidden">
+              <div style="background:rgba(255,255,255,.04);padding:7px 12px;display:flex;align-items:center;justify-content:space-between">
+                <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:#60A5FA">TPL-06 · Zalo OA · Khai trương / Event khu vực (Offline New)</span>
+                <span style="font-size:10px;color:var(--muted)">Segment: New mua tại CH · 3,760 data · Địa lý theo store</span>
+              </div>
+              <div style="padding:10px 14px">
+                <div style="font-family:var(--mono);font-size:12.5px;color:var(--text);line-height:1.8;background:rgba(0,0,0,.2);padding:10px 12px;border-radius:6px;white-space:pre-wrap">{{first_name}} ơi, {{store_nearby}} vừa có bộ sưu tập {{season_event}} mới cực hot! Ghé thăm YODY gần bạn để trải nghiệm trực tiếp nhé. Xem thêm: YODY.VN. LH: 18002086.</div>
+                <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+                  <span style="font-size:11px;background:rgba(52,211,153,.1);color:#34D399;padding:2px 8px;border-radius:4px">✓ ≤300 ký tự ZNS OA</span>
+                  <span style="font-size:11px;background:rgba(96,165,250,.1);color:#60A5FA;padding:2px 8px;border-radius:4px">Biến: {{first_name}} {{store_nearby}} {{season_event}}</span>
+                  <span style="font-size:11px;background:rgba(245,158,11,.1);color:#F59E0B;padding:2px 8px;border-radius:4px">Tone: Ấm áp · Kích thích ghé CH</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="font-size:11.5px;color:var(--dim);padding:4px 2px;line-height:1.7">
+              ⚙ <strong style="color:var(--text)">Ràng buộc kỹ thuật áp dụng:</strong> Biến {{city}} chỉ dùng được trên Meta/TikTok Ads (không cho ZNS/SMS theo Sheet "Biến theo Kênh") · {{last_product}} cần strip tên SKU cụ thể, chỉ dùng category để tránh lộ inventory · Consent check bắt buộc trước khi gửi ZNS · Upload Custom Audience Meta cần Marketing Lead approve.
+            </div>
+          </div>
+        </div>
+
         <div style="font-size:12px;color:var(--muted);margin-top:8px;font-family:var(--mono)">Owner: <span class="tag green">Marketing Team</span> · Deadline: 07/05/2026 · Approval: PO CYO</div>
       </div>
     </div>
@@ -936,6 +1075,18 @@ canvas{max-width:100%}
         </div>
       </div>
     </div>
+
+    <!-- 07 Feedback -->
+    <div class="layer-row" style="border-top:1px solid rgba(255,255,255,.06);margin-top:4px">
+      <div class="lr-label"><div class="lr-badge" style="background:rgba(255,255,255,.06);color:var(--dim)">✦</div><div class="lr-name" style="color:var(--dim)">Phản hồi</div></div>
+      <div class="lr-content">
+        <div style="font-size:13px;color:var(--dim);line-height:1.8;padding:6px 0">
+          Câu trả lời trên có hợp lý không? <strong style="color:var(--text)">(CÓ / KHÔNG)</strong> — Nếu chưa, hãy mô tả ngay bên dưới để team cải thiện CYO.<br>
+          <span style="font-size:12px;color:rgba(255,255,255,.25)">Ví dụ: &ldquo;Có&rdquo; &nbsp;·&nbsp; &ldquo;Không vì số Reactive tháng 4 thực tế khác với con số hệ thống đang hiển thị...&rdquo;</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1042,6 +1193,70 @@ canvas{max-width:100%}
           <li><strong>P0 — Align định nghĩa với BI:</strong> Resolve conflict "6 tháng vs 12 tháng" trước tháng 5 — lock chuẩn định nghĩa vào dbt README và Confluence để tránh báo cáo lệch nhau.</li>
           <li><strong>P1 — Track repeat purchase Reactive:</strong> Tạo segment <span class="tag amber">Reactive · Apr26</span>, theo dõi purchase lần 2 trong 60 ngày — benchmark mục tiêu 30% (cao hơn New vì đã có brand familiarity).</li>
         </ul>
+
+        <!-- CAMPAIGN TEMPLATES Q3 -->
+        <div style="margin-top:16px;border:1px solid rgba(251,146,60,.25);border-radius:10px;overflow:hidden">
+          <div style="background:rgba(251,146,60,.08);padding:8px 14px;font-family:var(--mono);font-size:11px;font-weight:700;color:#FB923C;letter-spacing:.8px;display:flex;align-items:center;gap:8px">
+            <span>📨</span> CAMPAIGN TEMPLATES — Reactive Win-back · Q3
+          </div>
+          <div style="padding:14px;display:grid;gap:10px">
+
+            <!-- Template 1 -->
+            <div style="border:1px solid rgba(255,255,255,.07);border-radius:8px;overflow:hidden">
+              <div style="background:rgba(255,255,255,.04);padding:7px 12px;display:flex;align-items:center;justify-content:space-between">
+                <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:#FB923C">TPL-07 · Zalo ZNS · Reactive Cohort 12–18 tháng (scale tiếp)</span>
+                <span style="font-size:10px;color:var(--muted)">Segment: Ngủ Đông Nhẹ đã Reactive · Focus cross-sell</span>
+              </div>
+              <div style="padding:10px 14px">
+                <div style="font-family:var(--mono);font-size:12.5px;color:var(--text);line-height:1.8;background:rgba(0,0,0,.2);padding:10px 12px;border-radius:6px;white-space:pre-wrap">{{first_name}} ơi, mừng bạn quay lại YODY 🎊 Sau {{last_product}} lần trước, đừng bỏ lỡ BST {{season_event}} mới — nhiều mẫu hot đang chờ. Ghé {{store_nearby}} hoặc YODY.VN nhé. LH: 18002086.</div>
+                <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+                  <span style="font-size:11px;background:rgba(52,211,153,.1);color:#34D399;padding:2px 8px;border-radius:4px">✓ ≤300 ký tự ZNS</span>
+                  <span style="font-size:11px;background:rgba(96,165,250,.1);color:#60A5FA;padding:2px 8px;border-radius:4px">Biến: {{first_name}} {{last_product}} {{season_event}} {{store_nearby}}</span>
+                  <span style="font-size:11px;background:rgba(251,146,60,.1);color:#FB923C;padding:2px 8px;border-radius:4px">Tone: Ấm áp · Khen ngợi quyết định quay lại</span>
+                  <span style="font-size:11px;background:rgba(52,211,153,.1);color:#34D399;padding:2px 8px;border-radius:4px">No discount — test loyalty trước</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Template 2 -->
+            <div style="border:1px solid rgba(255,255,255,.07);border-radius:8px;overflow:hidden">
+              <div style="background:rgba(255,255,255,.04);padding:7px 12px;display:flex;align-items:center;justify-content:space-between">
+                <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:#A78BFA">TPL-08 · Zalo ZNS · Reactive cận VIP (upsell hạng)</span>
+                <span style="font-size:10px;color:var(--muted)">Segment: Reactive có tích lũy 9–9.95tr · Kích lên VIP</span>
+              </div>
+              <div style="padding:10px 14px">
+                <div style="font-family:var(--mono);font-size:12.5px;color:var(--text);line-height:1.8;background:rgba(0,0,0,.2);padding:10px 12px;border-radius:6px;white-space:pre-wrap">{{first_name}} ơi, bạn chỉ còn cách hạng {{tier}} VIP một bước nhỏ! Thêm 1 đơn hàng nguyên giá là bạn nhận được ưu đãi độc quyền dành riêng cho thành viên VIP. Ghé {{store_nearby}} hôm nay nhé. LH: 18002086.</div>
+                <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+                  <span style="font-size:11px;background:rgba(52,211,153,.1);color:#34D399;padding:2px 8px;border-radius:4px">✓ ≤300 ký tự ZNS</span>
+                  <span style="font-size:11px;background:rgba(96,165,250,.1);color:#60A5FA;padding:2px 8px;border-radius:4px">Biến: {{first_name}} {{tier}} {{store_nearby}}</span>
+                  <span style="font-size:11px;background:rgba(167,139,250,.1);color:#A78BFA;padding:2px 8px;border-radius:4px">Tone: Trang trọng · Khuyến khích upgrade</span>
+                  <span style="font-size:11px;background:rgba(52,211,153,.1);color:#34D399;padding:2px 8px;border-radius:4px">No discount — push nguyên giá để tích lũy nhanh hơn</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Template 3 -->
+            <div style="border:1px solid rgba(255,255,255,.07);border-radius:8px;overflow:hidden">
+              <div style="background:rgba(255,255,255,.04);padding:7px 12px;display:flex;align-items:center;justify-content:space-between">
+                <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:#F87171">TPL-09 · SMS · Reactive >24 tháng (last resort · discount mạnh)</span>
+                <span style="font-size:10px;color:var(--muted)">Segment: Ngủ Đông Nặng đã có 1 reactive · A/B test · PO approve</span>
+              </div>
+              <div style="padding:10px 14px">
+                <div style="font-family:var(--mono);font-size:12.5px;color:var(--text);line-height:1.8;background:rgba(0,0,0,.2);padding:10px 12px;border-radius:6px;white-space:pre-wrap">YODY.VN mung ban {{first_name}} quay lai! Tang VOUCHER {{discount_value}} cho don {{total_orders}}+1 nguyen gia 399K (Ma: {{promo_code}}). HSD: {{expiry_date}}. Ghe YODY ngay. LH: 18002086.</div>
+                <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+                  <span style="font-size:11px;background:rgba(52,211,153,.1);color:#34D399;padding:2px 8px;border-radius:4px">✓ ≤160 ký tự (no dấu)</span>
+                  <span style="font-size:11px;background:rgba(96,165,250,.1);color:#60A5FA;padding:2px 8px;border-radius:4px">Biến: {{first_name}} {{discount_value}} {{total_orders}} {{promo_code}} {{expiry_date}}</span>
+                  <span style="font-size:11px;background:rgba(248,113,113,.1);color:#F87171;padding:2px 8px;border-radius:4px">⚠ Discount enabled — PO phải toggle ON · CMO approve</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="font-size:11.5px;color:var(--dim);padding:4px 2px;line-height:1.7">
+              ⚙ <strong style="color:var(--text)">Ràng buộc kỹ thuật áp dụng:</strong> TPL-07 & 08 no-discount-default theo rule ContentGen Agent · TPL-09 cần PO enable discount flag + CMO approve trước khi export · {{total_orders}} chỉ hỗ trợ trên ZNS/SMS theo whitelist · Frequency cap: không gửi quá 1 tin ZNS/SMS trong 14 ngày cho cùng KH · Loại trừ tệp không muốn làm phiền và nhân viên YODY.
+            </div>
+          </div>
+        </div>
+
         <div style="font-size:12px;color:var(--muted);margin-top:8px;font-family:var(--mono)">Owner: <span class="tag amber">Marketing + BI Team</span> · Deadline: 07/05/2026 · Approval: PO CYO</div>
       </div>
     </div>
@@ -1062,8 +1277,21 @@ canvas{max-width:100%}
         </div>
       </div>
     </div>
+
+    <!-- 07 Feedback -->
+    <div class="layer-row" style="border-top:1px solid rgba(255,255,255,.06);margin-top:4px">
+      <div class="lr-label"><div class="lr-badge" style="background:rgba(255,255,255,.06);color:var(--dim)">✦</div><div class="lr-name" style="color:var(--dim)">Phản hồi</div></div>
+      <div class="lr-content">
+        <div style="font-size:13px;color:var(--dim);line-height:1.8;padding:6px 0">
+          Câu trả lời trên có hợp lý không? <strong style="color:var(--text)">(CÓ / KHÔNG)</strong> — Nếu chưa, hãy mô tả ngay bên dưới để team cải thiện CYO.<br>
+          <span style="font-size:12px;color:rgba(255,255,255,.25)">Ví dụ: &ldquo;Có&rdquo; &nbsp;·&nbsp; &ldquo;Không vì số Reactive tháng 4 thực tế khác với con số hệ thống đang hiển thị...&rdquo;</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
+
 
 <!-- ══════════ INSTRUCTION SECTION ══════════ -->
 <div class="instr-wrap">
